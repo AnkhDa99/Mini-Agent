@@ -75,66 +75,55 @@ IT 运维团队日常处理大量故障工单，核心痛点：
 
 ### 2.1 整体架构图
 
-```mermaid
-graph TB
-    subgraph 前端
-        UI[Web UI<br/>SSE 流式渲染]
-    end
+~~~text
+【前端层】
+  Web UI（SSE 流式渲染）
+       │
+       ▼
+【API 层】
+  JWT + RBAC 认证
+       │
+       ├── 对话路由（SSE Stream）
+       │        │
+       │        ▼
+       │   【Agent 决策层】
+       │     Query 分类（chitchat / shallow / deep）
+       │        │
+       │        ▼
+       │     ReAct 循环（Think → Act → Observe）
+       │        │
+       │        ▼
+       │   【检索层】
+       │     场景匹配（FAISS + Neo4j）
+       │        │ 未命中
+       │        ▼
+       │     DocSummaryIndex（文档级语义）
+       │        ▼
+       │     FAISS（chunk 级语义）
+       │        ▼
+       │     Elasticsearch（BM25 关键词）
+       │        ▼
+       │     Concentration-RRF（自适应融合）
+       │        ▼
+       │     BGE Reranker（Cross-Encoder 精排）
+       │        │
+       │        ▼
+       │     Critic 评估（完整性 / 可靠性 / 信息增益）
+       │        ├── 信息不足 ──▶ 返回 ReAct 继续检索
+       │        └── 评估满足 ──▶ 4 级降级保障 / 回答输出
+       │
+       └── 知识库路由（CRUD + 审核）
+                │
+                ▼
+          【知识管理层】
+            场景模板 → 知识条目
+                         ├──▶ Neo4j 知识图谱
+                         ├──▶ 修订历史
+                         └──▶ 场景匹配引擎
 
-    subgraph API 层
-        Auth[认证<br/>JWT + RBAC]
-        Chat[对话路由<br/>SSE Stream]
-        KB[知识库路由<br/>CRUD + 审核]
-    end
-
-    subgraph Agent 决策层
-        CLF[Query 分类器<br/>chitchat/shallow/deep]
-        LOOP[ReAct 循环<br/>Think → Act → Observe]
-        CRT[Critic 评估<br/>完整性/可靠性/信息增益]
-        DGR[降级链<br/>4 级保障]
-    end
-
-    subgraph 检索层
-        SM[场景匹配引擎<br/>FAISS + Neo4j]
-        DOC[DocSummaryIndex<br/>文档级语义]
-        FAISS[FAISS 向量检索<br/>chunk 级语义]
-        ES[Elasticsearch<br/>BM25 关键词]
-        RRF[Concentration-RRF<br/>自适应融合]
-        RERANK[BGE Reranker<br/>Cross-Encoder 精排]
-    end
-
-    subgraph 知识管理层
-        TMPL[场景模板]
-        ENTRY[知识条目]
-        NEO4J[(Neo4j<br/>知识图谱)]
-        REV[修订历史]
-    end
-
-    subgraph 基础设施
-        MySQL[(MySQL 8.0)]
-        Redis[(Redis 7)]
-        MINIO[MinIO]
-        KAFKA[Kafka]
-        TIKA[Apache Tika]
-    end
-
-    UI --> Chat
-    Chat --> LOOP
-    LOOP --> SM
-    SM -->|未命中| DOC
-    DOC --> FAISS
-    FAISS --> ES
-    ES --> RRF
-    RRF --> RERANK
-    RERANK --> CRT
-    CRT -->|信息不足| LOOP
-    CRT -->|满意| DGR
-
-    KB --> TMPL
-    KB --> ENTRY
-    ENTRY --> NEO4J
-    ENTRY --> SM
-```
+【基础设施】
+  MySQL 8.0 · Redis 7 · MinIO · Kafka · Apache Tika
+~~~
 
 ### 2.2 技术栈
 

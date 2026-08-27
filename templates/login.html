@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Agent - 登录</title>
+    <style>
+        :root {
+            --blue-900: #2f261a;
+            --blue-600: #8a5a20;
+            --blue-500: #a96825;
+            --blue-400: #c9872f;
+            --blue-200: #ead7a9;
+            --blue-100: #f5e6c8;
+            --blue-50: #fff7e5;
+            --white: #ffffff;
+            --text-main: #2f261a;
+            --text-sub: #7a6a52;
+            --border: rgba(138, 90, 32, 0.2);
+            --shadow-soft: 0 18px 45px rgba(94, 64, 28, 0.13);
+            --radius-xl: 24px;
+            --radius-md: 14px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, "Microsoft YaHei", sans-serif;
+            color: var(--text-main);
+            background:
+                radial-gradient(circle at 15% 8%, rgba(255, 250, 224, 0.82), transparent 34%),
+                radial-gradient(circle at 88% 18%, rgba(234, 215, 169, 0.62), transparent 28%),
+                linear-gradient(135deg, #f7efd9 0%, #efe0bb 48%, #fffaf0 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-card {
+            background: rgba(255, 250, 240, 0.88);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(18px);
+            padding: 40px 36px;
+            width: 380px;
+            max-width: 90vw;
+            animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--blue-600);
+            text-align: center;
+            margin-bottom: 4px;
+        }
+
+        .login-subtitle {
+            font-size: 13px;
+            color: var(--text-sub);
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: var(--white);
+        }
+
+        .form-group input:focus {
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(138, 90, 32, 0.12);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-group input:focus:hover {
+            box-shadow: 0 0 0 5px rgba(138, 90, 32, 0.08);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #8a5a20, #c9872f);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-top: 6px;
+            box-shadow: 0 4px 14px rgba(138, 90, 32, 0.22);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(138, 90, 32, 0.28), 0 0 0 4px rgba(138, 90, 32, 0.08);
+        }
+        .btn-primary:hover::after { opacity: 1; }
+        .btn-primary:active {
+            transform: translateY(0) scale(0.97);
+            transition: all 0.1s ease;
+            box-shadow: 0 2px 6px rgba(138, 90, 32, 0.18);
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            color: var(--blue-600);
+            border: 1px solid rgba(138, 90, 32, 0.28);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .btn-secondary:hover {
+            background: var(--blue-50);
+            border-color: rgba(138, 90, 32, 0.42);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(138, 90, 32, 0.08);
+        }
+        .btn-secondary:active {
+            transform: scale(0.97);
+            transition: all 0.1s ease;
+        }
+
+        .btn-guest {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.22);
+        }
+        .btn-guest:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.32), 0 0 0 4px rgba(16, 185, 129, 0.08);
+        }
+        .btn-guest:active {
+            transform: translateY(0) scale(0.97);
+            transition: all 0.1s ease;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+
+        .success-msg {
+            color: #16a34a;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            min-height: 20px;
+        }
+
+        .mode-toggle {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-sub);
+            margin-top: 14px;
+        }
+
+        .mode-toggle a {
+            color: var(--blue-600);
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="login-title">Mini Agent</div>
+        <div class="login-subtitle" id="modeSubtitle">登录以继续</div>
+
+        <div class="form-group">
+            <label>用户名</label>
+            <input id="username" type="text" placeholder="请输入用户名" autocomplete="username">
+        </div>
+
+        <div class="form-group">
+            <label>密码</label>
+            <input id="password" type="password" placeholder="请输入密码" autocomplete="current-password">
+        </div>
+
+        <button class="btn-primary" id="submitBtn" onclick="submit()">登录</button>
+        <button class="btn-guest" onclick="guestLogin()">游客登录</button>
+        <button class="btn-secondary" id="toggleBtn" onclick="toggleMode()">切换到注册</button>
+
+        <div id="msg" class="error-msg"></div>
+    </div>
+
+    <script>
+        let mode = "login";
+
+        function toggleMode() {
+            document.getElementById("msg").textContent = "注册功能暂时关闭，请使用游客登录或联系管理员邮箱：{{ contact_admin_email }}";
+            document.getElementById("msg").className = "error-msg";
+        }
+
+        async function guestLogin() {
+            const msgEl = document.getElementById("msg");
+            msgEl.textContent = "";
+            msgEl.className = "error-msg";
+
+            try {
+                const existingGuestId = localStorage.getItem("guest_user_id");
+                const body = existingGuestId ? JSON.stringify({ guest_user_id: parseInt(existingGuestId) }) : "{}";
+                const resp = await fetch("/auth/guest-login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: body,
+                });
+
+                const data = await resp.json();
+
+                if (!resp.ok) {
+                    msgEl.textContent = data.detail || "游客登录失败";
+                    return;
+                }
+
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("username", data.username);
+                localStorage.setItem("role", data.role);
+                localStorage.setItem("guest_user_id", data.user_id);
+                localStorage.setItem("question_limit", data.question_limit);
+                localStorage.setItem("question_count", data.question_count);
+                localStorage.setItem("document_limit", data.document_limit);
+
+                msgEl.className = "success-msg";
+                msgEl.textContent = "游客登录成功，正在跳转...";
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 500);
+            } catch (e) {
+                msgEl.textContent = "网络错误，请稍后重试";
+            }
+        }
+
+        async function submit() {
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const msgEl = document.getElementById("msg");
+            msgEl.textContent = "";
+            msgEl.className = "error-msg";
+
+            if (!username || !password) {
+                msgEl.textContent = "请填写用户名和密码";
+                return;
+            }
+
+            if (mode === "register" && password.length < 6) {
+                msgEl.textContent = "密码至少 6 个字符";
+                return;
+            }
+
+            try {
+                const url = mode === "login" ? "/auth/login" : "/auth/register";
+                const resp = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await resp.json();
+
+                if (!resp.ok) {
+                    msgEl.textContent = data.detail || "操作失败";
+                    return;
+                }
+
+                // 存储 token 并跳转
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("username", data.username);
+                localStorage.setItem("role", data.role);
+
+                msgEl.className = "success-msg";
+                msgEl.textContent = "登录成功，正在跳转...";
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 500);
+            } catch (e) {
+                msgEl.textContent = "网络错误，请稍后重试";
+            }
+        }
+
+        // 初始状态：注册按钮加锁+变灰
+        (function init() {
+            const toggleBtn = document.getElementById("toggleBtn");
+            toggleBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="vertical-align:middle;margin-right:4px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" fill="none" stroke="currentColor" stroke-width="2"/></svg>注册';
+            toggleBtn.style.opacity = "0.4";
+            toggleBtn.style.cursor = "not-allowed";
+        })();
+
+        // 回车提交
+        document.getElementById("password").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") submit();
+        });
+        document.getElementById("username").addEventListener("keydown", function (e) {
+            if (e.key === "Enter") document.getElementById("password").focus();
+        });
+    </script>
+</body>
+</html>

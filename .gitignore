@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+/agent/
+
+# IDE
+.idea/
+.vscode/
+
+# Claude
+.claude/
+
+# 环境变量（含密钥）
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+
+# 数据文件（FAISS索引、模型、输出等可重建内容）
+data/faiss/
+data/models/
+data/output/
+data/scenario_faiss/
+data/*.txt
+data/*.json
+
+# 日志、上传与本地临时文件
+*.log
+logs/
+uploads/
+tmp/
+
+# 前端依赖、缓存与构建产物
+frontend/node_modules/
+frontend/dist/
+frontend/%APPDATA%/
+frontend/*.tsbuildinfo
+frontend/package-lock.json
+frontend/vite.config.js
+frontend/vite.config.d.ts
+
+# 归档与本地打包产物
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Docker
+docker-compose.override.yml

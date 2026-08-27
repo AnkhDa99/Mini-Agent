@@ -1,0 +1,16 @@
+services:
+  minio:
+    image: minio/minio:RELEASE.2024-07-16T23-46-41Z
+    container_name: mini-agent-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - mini_agent_minio_data:/data
+
+volumes:
+  mini_agent_minio_data:
